@@ -2,6 +2,22 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import '../style.css'
+
+const Notification = ({notification, addedBlog}) => {
+  if (notification === 'success') {
+    return <div className='successNotify'>
+      Succesfully added a blog! {addedBlog.title}
+    </div>
+  } 
+
+  else if (notification === 'error') {
+    return <div className='errorNotify'>
+      Wrong username or password
+    </div>
+  }
+}
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +27,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [addedBlog, setAddedBlog] = useState('')
 
 
  
@@ -30,6 +48,7 @@ const App = () => {
     const loggedInUser = window.localStorage.getItem('loggedInUser')
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser)
+      blogService.getToken(user.token)
       setUserInfo(user)
     }
    
@@ -54,6 +73,11 @@ const App = () => {
 
     } catch (error) {
       console.log('wrong credentials')
+      setNotification('error')
+      setTimeout(() => {
+        setNotification(null)
+        
+      }, 2000);
     }
 
   
@@ -103,6 +127,13 @@ const App = () => {
     try {
       const createBlog = await blogService.createBlog(newObject)
       console.log(createBlog)
+      setAddedBlog(createBlog)
+      
+      setNotification('success')
+      setTimeout(() => {
+        setNotification(null)
+        
+      }, 3000);
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -119,6 +150,7 @@ const App = () => {
   if (userInfo === null) {
     return (
       <div>
+        <Notification notification={notification}/>
         <h2>log in to application</h2>
         {loginForm()}
   
@@ -129,6 +161,7 @@ const App = () => {
    <div>
       
       <h2>blogs</h2>
+      <Notification notification={notification} addedBlog={addedBlog}/>
       <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
       
       

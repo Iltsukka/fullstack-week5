@@ -1,0 +1,13 @@
+.errorNotify {
+    border: 3px solid red;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.successNotify {
+    border: 3px solid green;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
