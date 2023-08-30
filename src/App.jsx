@@ -1,22 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import '../style.css'
-
-const Notification = ({notification, addedBlog}) => {
-  if (notification === 'success') {
-    return <div className='successNotify'>
-      Succesfully added a blog! {addedBlog.title}
-    </div>
-  } 
-
-  else if (notification === 'error') {
-    return <div className='errorNotify'>
-      Wrong username or password
-    </div>
-  }
-}
+import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -29,6 +18,7 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
   const [addedBlog, setAddedBlog] = useState('')
+  const togglableRef = useRef()
 
 
  
@@ -78,6 +68,7 @@ const App = () => {
         setNotification(null)
         
       }, 2000);
+      
     }
 
   
@@ -137,6 +128,7 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      togglableRef.current.toggleVisibility()
       
       
       
@@ -163,9 +155,10 @@ const App = () => {
       <h2>blogs</h2>
       <Notification notification={notification} addedBlog={addedBlog}/>
       <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
-      
-      
-      <h2>create new blog</h2>
+      <Togglable buttonLabel='create blog' ref={togglableRef}>
+      <BlogForm handleCreate={handleCreate} title={title} author={author} url={url} handleAuthorChange={({target}) => setAuthor(target.value)} handleTitleChange={({target}) => setTitle(target.value) } handleUrlChange={({target}) => setUrl(target.value)}/>
+      </Togglable>
+      {/* <h2>create new blog</h2>
       <form onSubmit={handleCreate}>
         <div>
           title <input type='text' value={title} name='Title' onChange={({target}) => setTitle(target.value)}/>
@@ -178,7 +171,7 @@ const App = () => {
         </div>
         <button type='submit'>create</button>
       </form>
-      <br />
+      <br /> */}
       <div>
         
       {blogs.filter(blog => blog.user.username === userInfo.username).map(blog =>
