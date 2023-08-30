@@ -4,8 +4,9 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import '../style.css'
 import Notification from './components/Notification'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
+// import BlogForm from './components/BlogForm'
+// import Togglable from './components/Togglable'
+import NewBlogForm from './components/NewBlogForm'
 
 
 const App = () => {
@@ -13,12 +14,12 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [userInfo, setUserInfo] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  // const [title, setTitle] = useState('')
+  // const [author, setAuthor] = useState('')
+  // const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
-  const [addedBlog, setAddedBlog] = useState('')
-  const togglableRef = useRef()
+  // const [addedBlog, setAddedBlog] = useState('')
+  // const togglableRef = useRef()
 
 
  
@@ -107,37 +108,37 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  const handleCreate = async (event) => {
-    event.preventDefault()
-    const newObject = {
-      title,
-      author,
-      url
-    }
+  // const handleCreate = async (event) => {
+  //   event.preventDefault()
+  //   const newObject = {
+  //     title,
+  //     author,
+  //     url
+  //   }
 
-    try {
-      const createBlog = await blogService.createBlog(newObject)
-      console.log(createBlog)
-      setAddedBlog(createBlog)
+  //   try {
+  //     const createBlog = await blogService.createBlog(newObject)
+  //     console.log(createBlog)
+  //     setAddedBlog(createBlog)
       
-      setNotification('success')
-      setTimeout(() => {
-        setNotification(null)
+  //     setNotification('success')
+  //     setTimeout(() => {
+  //       setNotification(null)
         
-      }, 3000);
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      togglableRef.current.toggleVisibility()
+  //     }, 3000);
+  //     setTitle('')
+  //     setAuthor('')
+  //     setUrl('')
+  //     togglableRef.current.toggleVisibility()
       
       
       
       
       
-    } catch(exception) {
-      console.log('error creating a blog')
-    }
-  } 
+  //   } catch(exception) {
+  //     console.log('error creating a blog')
+  //   }
+  // } 
   
   if (userInfo === null) {
     return (
@@ -150,28 +151,16 @@ const App = () => {
       
   }
   return (
-   <div>
+    <div>
+    <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut}/>
+  {/* //  <div>
       
-      <h2>blogs</h2>
-      <Notification notification={notification} addedBlog={addedBlog}/>
-      <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
-      <Togglable buttonLabel='create blog' ref={togglableRef}>
-      <BlogForm handleCreate={handleCreate} title={title} author={author} url={url} handleAuthorChange={({target}) => setAuthor(target.value)} handleTitleChange={({target}) => setTitle(target.value) } handleUrlChange={({target}) => setUrl(target.value)}/>
-      </Togglable>
-      {/* <h2>create new blog</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          title <input type='text' value={title} name='Title' onChange={({target}) => setTitle(target.value)}/>
-        </div>
-        <div>
-          author <input type='text' value={author} name='Author' onChange={({target}) => setAuthor(target.value)}/>
-        </div>
-        <div>
-          url <input type='text' value={url} name='Url' onChange={({target}) => setUrl(target.value)}/>
-        </div>
-        <button type='submit'>create</button>
-      </form>
-      <br /> */}
+  //     <h2>blogs</h2>
+  //     <Notification notification={notification} addedBlog={addedBlog}/>
+  //     <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
+  //     <Togglable buttonLabel='create blog' ref={togglableRef}>
+  //     <BlogForm handleCreate={handleCreate} title={title} author={author} url={url} handleAuthorChange={({target}) => setAuthor(target.value)} handleTitleChange={({target}) => setTitle(target.value) } handleUrlChange={({target}) => setUrl(target.value)}/>
+  //     </Togglable> */}
       <div>
         
       {blogs.filter(blog => blog.user.username === userInfo.username).map(blog =>
@@ -179,7 +168,8 @@ const App = () => {
       )}
       </div>
 
-  </div>
+    </div>
+  
     
   )
 }
