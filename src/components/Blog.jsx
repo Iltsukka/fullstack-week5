@@ -1,5 +1,5 @@
 import { useState } from "react"
-const Blog = ({ blog }) => {
+const Blog = ({ blog, username }) => {
   const [show, setShow] = useState(true)
   const label = show ? 'show' : 'hide'
   const blogStyle = {
@@ -18,7 +18,7 @@ const Blog = ({ blog }) => {
       </div>
       <div>{blog.url}</div>
       <div>likes: {blog.likes}</div>
-      <div>{blog.user.username}</div>
+      <div>{username}</div>
       </div>
       )
   }

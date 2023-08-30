@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import '../style.css'
 import Notification from './components/Notification'
-// import BlogForm from './components/BlogForm'
-// import Togglable from './components/Togglable'
+
 import NewBlogForm from './components/NewBlogForm'
 
 
@@ -14,28 +13,16 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [userInfo, setUserInfo] = useState(null)
-  // const [title, setTitle] = useState('')
-  // const [author, setAuthor] = useState('')
-  // const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
-  // const [addedBlog, setAddedBlog] = useState('')
-  // const togglableRef = useRef()
   const [addedBlog, setAddedBlog] = useState(null)
-  const [retrieveBlogs, setRetrieveBlogs] = useState(false)
-
-
- 
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {setBlogs(blogs), console.log(blogs)}
-    )  
-    
-   
-  
-  }, [retrieveBlogs])
+    if (userInfo !== null) {
+      blogService.getAll().then(blogs => setBlogs(blogs.filter(blog => blog.user.username === userInfo.username)))
+    }
+  }, [userInfo])
 
   
-
   useEffect(() => {
     
     const loggedInUser = window.localStorage.getItem('loggedInUser')
@@ -51,11 +38,10 @@ const App = () => {
     try {
     const createdBlog = await blogService.createBlog(blogObject)
     setBlogs(blogs.concat(createdBlog))
-    setRetrieveBlogs(!retrieveBlogs)
     setNotification('success')
     setAddedBlog(createdBlog)
     setTimeout(() => {
-      setNotification(null)
+    setNotification(null)
       
     }, 3000);
     } catch(exception) {
@@ -75,9 +61,6 @@ const App = () => {
       setPassword('')
       console.log(`token after logging in is ${userInfo.token}`)
       blogService.getToken(userInfo.token)
-      // const filtered = blogs.filter(blog => blog.user.username === userInfo.username)
-      // setBlogs(filtered)
-      
       window.localStorage.setItem('loggedInUser', JSON.stringify(userInfo))
       console.log('login successful')
 
@@ -93,9 +76,6 @@ const App = () => {
 
   
   }
-
- 
-
 
   const loginForm = () => {
     
@@ -127,37 +107,7 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
-  // const handleCreate = async (event) => {
-  //   event.preventDefault()
-  //   const newObject = {
-  //     title,
-  //     author,
-  //     url
-  //   }
 
-  //   try {
-  //     const createBlog = await blogService.createBlog(newObject)
-  //     console.log(createBlog)
-  //     setAddedBlog(createBlog)
-      
-  //     setNotification('success')
-  //     setTimeout(() => {
-  //       setNotification(null)
-        
-  //     }, 3000);
-  //     setTitle('')
-  //     setAuthor('')
-  //     setUrl('')
-  //     togglableRef.current.toggleVisibility()
-      
-      
-      
-      
-      
-  //   } catch(exception) {
-  //     console.log('error creating a blog')
-  //   }
-  // } 
   
   if (userInfo === null) {
     return (
@@ -173,19 +123,11 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification notification={notification} addedBlog={addedBlog}/>
-    <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut} createBlog={createBlog}/>
-  {/* //  <div>
-      
-  //     <h2>blogs</h2>
-  //     <Notification notification={notification} addedBlog={addedBlog}/>
-  //     <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
-  //     <Togglable buttonLabel='create blog' ref={togglableRef}>
-  //     <BlogForm handleCreate={handleCreate} title={title} author={author} url={url} handleAuthorChange={({target}) => setAuthor(target.value)} handleTitleChange={({target}) => setTitle(target.value) } handleUrlChange={({target}) => setUrl(target.value)}/>
-  //     </Togglable> */}
+      <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut} createBlog={createBlog}/>
+
       <div>
-        
-      {blogs.filter(blog => blog.user.username === userInfo.username).map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} username={userInfo.username} />
       )}
       </div>
 
