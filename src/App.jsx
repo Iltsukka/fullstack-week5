@@ -50,9 +50,8 @@ const App = () => {
   const createBlog = async (blogObject) => {
     try {
     const createdBlog = await blogService.createBlog(blogObject)
-    console.log(createdBlog)
-    setRetrieveBlogs(!retrieveBlogs)
     setBlogs(blogs.concat(createdBlog))
+    setRetrieveBlogs(!retrieveBlogs)
     setNotification('success')
     setAddedBlog(createdBlog)
     setTimeout(() => {
