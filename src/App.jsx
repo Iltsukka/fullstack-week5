@@ -20,6 +20,8 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   // const [addedBlog, setAddedBlog] = useState('')
   // const togglableRef = useRef()
+  const [addedBlog, setAddedBlog] = useState(null)
+  const [retrieveBlogs, setRetrieveBlogs] = useState(false)
 
 
  
@@ -30,7 +32,7 @@ const App = () => {
     
    
   
-  }, [])
+  }, [retrieveBlogs])
 
   
 
@@ -44,6 +46,24 @@ const App = () => {
     }
    
   }, [])
+
+  const createBlog = async (blogObject) => {
+    try {
+    const createdBlog = await blogService.createBlog(blogObject)
+    console.log(createdBlog)
+    setRetrieveBlogs(!retrieveBlogs)
+    setBlogs(blogs.concat(createdBlog))
+    setNotification('success')
+    setAddedBlog(createdBlog)
+    setTimeout(() => {
+      setNotification(null)
+      
+    }, 3000);
+    } catch(exception) {
+      console.log('error creating a blog')
+
+    }
+  }
 
  
 
@@ -152,7 +172,9 @@ const App = () => {
   }
   return (
     <div>
-    <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut}/>
+      <h2>blogs</h2>
+      <Notification notification={notification} addedBlog={addedBlog}/>
+    <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut} createBlog={createBlog}/>
   {/* //  <div>
       
   //     <h2>blogs</h2>
