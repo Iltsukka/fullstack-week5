@@ -107,6 +107,15 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
+  const handleLikes = async (id, newObject) => {
+    try {
+    const response = await blogService.likedBlog(id, newObject)
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
+    } catch(exception) {
+      console.log('error liking a blog', exception)
+    }
+  }
+
 
   
   if (userInfo === null) {
@@ -127,7 +136,7 @@ const App = () => {
 
       <div>
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} username={userInfo.username} />
+        <Blog key={blog.id} blog={blog} username={userInfo.username} handleLikes={handleLikes} />
       )}
       </div>
 
