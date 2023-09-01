@@ -1,5 +1,6 @@
 import { useState, useImperativeHandle, forwardRef } from 'react'
 
+
 const Togglable = forwardRef((props,ref) => {
   const [visible, setVisible] = useState(false)
 
@@ -16,6 +17,8 @@ const Togglable = forwardRef((props,ref) => {
     }
   })
 
+ 
+
   return (
     <div>
       <div style={hideWhenVisible}>
@@ -29,5 +32,7 @@ const Togglable = forwardRef((props,ref) => {
     </div>
   )
 })
+
+
 
 export default Togglable
