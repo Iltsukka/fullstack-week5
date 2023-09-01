@@ -22,40 +22,40 @@ const App = () => {
     }
   }, [userInfo])
 
-  
+
   useEffect(() => {
-    
+
     const loggedInUser = window.localStorage.getItem('loggedInUser')
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser)
       blogService.getToken(user.token)
       setUserInfo(user)
     }
-   
+
   }, [])
 
   const createBlog = async (blogObject) => {
     try {
-    const createdBlog = await blogService.createBlog(blogObject)
-    setBlogs(blogs.concat(createdBlog))
-    setNotification('success')
-    setAddedBlog(createdBlog)
-    setTimeout(() => {
-    setNotification(null)
-      
-    }, 3000);
+      const createdBlog = await blogService.createBlog(blogObject)
+      setBlogs(blogs.concat(createdBlog))
+      setNotification('success')
+      setAddedBlog(createdBlog)
+      setTimeout(() => {
+        setNotification(null)
+
+      }, 3000)
     } catch(exception) {
       console.log('error creating a blog')
 
     }
   }
 
- 
+
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const userInfo = await loginService.login({username, password})
+      const userInfo = await loginService.login({ username, password })
       setUserInfo(userInfo)
       setUsername('')
       setPassword('')
@@ -69,36 +69,36 @@ const App = () => {
       setNotification('error')
       setTimeout(() => {
         setNotification(null)
-        
-      }, 2000);
-      
+
+      }, 2000)
+
     }
 
-  
+
   }
 
   const loginForm = () => {
-    
-   return <form onSubmit={handleLogin}>
+
+    return <form onSubmit={handleLogin}>
       <div>
-        username 
+        username
         <input
-         type='text'
-         value={username}
-         name='Username'
-         onChange={({target}) => setUsername(target.value)}
-         />
-         </div>
-         <div>
+          type='text'
+          value={username}
+          name='Username'
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
           password
-          <input
+        <input
           type='password'
           value={password}
           name='Password'
-          onChange={({target}) => setPassword(target.value)}
-          />
-         </div>
-         <button type='submit'>login</button>
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type='submit'>login</button>
     </form>
   }
 
@@ -109,15 +109,15 @@ const App = () => {
 
   const handleLikes = async (id, newObject) => {
     try {
-    const response = await blogService.likedBlog(id, newObject)
-    setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
+      const response = await blogService.likedBlog(id, newObject)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : response))
     } catch(exception) {
       console.log('error liking a blog', exception)
     }
   }
 
   const handleDelete = async (id, blogName) => {
-    
+
     try {
       const response = blogService.deleteBlog(id)
       setBlogs(blogs.filter(blog => blog.id !== id))
@@ -126,24 +126,24 @@ const App = () => {
       setAddedBlog(blogName)
       setTimeout(() => {
         setNotification(null)
-        
-      }, 2000);
+
+      }, 2000)
     } catch(exception) {
       console.log('error deleting a blog', exception)
     }
   }
 
 
-  
+
   if (userInfo === null) {
     return (
       <div>
         <Notification notification={notification}/>
         <h2>log in to application</h2>
         {loginForm()}
-  
+
       </div> )
-      
+
   }
   return (
     <div>
@@ -153,13 +153,13 @@ const App = () => {
 
       <div>
         {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} username={userInfo.name} handleLikes={handleLikes} handleDelete={handleDelete} />
-      )}
+          <Blog key={blog.id} blog={blog} username={userInfo.name} handleLikes={handleLikes} handleDelete={handleDelete} />
+        )}
       </div>
 
     </div>
-  
-    
+
+
   )
 }
 
