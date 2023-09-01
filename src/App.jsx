@@ -116,6 +116,23 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (id, blogName) => {
+    
+    try {
+      const response = blogService.deleteBlog(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      console.log('deleted a blog')
+      setNotification('deletedBlog')
+      setAddedBlog(blogName)
+      setTimeout(() => {
+        setNotification(null)
+        
+      }, 2000);
+    } catch(exception) {
+      console.log('error deleting a blog', exception)
+    }
+  }
+
 
   
   if (userInfo === null) {
@@ -135,8 +152,8 @@ const App = () => {
       <NewBlogForm userInfo={userInfo} handleLogOut={handleLogOut} createBlog={createBlog}/>
 
       <div>
-        {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} username={userInfo.username} handleLikes={handleLikes} />
+        {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} username={userInfo.name} handleLikes={handleLikes} handleDelete={handleDelete} />
       )}
       </div>
 

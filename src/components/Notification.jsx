@@ -10,6 +10,12 @@ const Notification = ({notification, addedBlog}) => {
         Wrong username or password
       </div>
     }
+
+    else if (notification === 'deletedBlog') {
+      return <div className="successNotify">
+        Deleted blog {addedBlog}
+      </div>
+    }
   }
 
 export default Notification
