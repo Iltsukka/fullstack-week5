@@ -4,13 +4,13 @@ const BlogForm = ({ handleCreate, title, author, url, handleTitleChange, handleA
       <h2>create new blog</h2>
       <form onSubmit={handleCreate}>
         <div>
-          title <input type='text' value={title} name='Title' onChange={handleTitleChange}/>
+          title <input type='text' value={title} name='Title' onChange={handleTitleChange} placeholder="title"/>
         </div>
         <div>
-          author <input type='text' value={author} name='Author' onChange={handleAuthorChange}/>
+          author <input type='text' value={author} name='Author' onChange={handleAuthorChange} placeholder="author"/>
         </div>
         <div>
-          url <input type='text' value={url} name='Url' onChange={handleUrlChange}/>
+          url <input type='text' value={url} name='Url' onChange={handleUrlChange} placeholder="url"/>
         </div>
         <button type='submit'>create</button>
       </form>
