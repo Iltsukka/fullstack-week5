@@ -34,7 +34,7 @@ const Blog = ({ blog, username, handleLikes, handleDelete }) => {
           <button onClick={() => {setShow(!show)}}>{label}</button>
         </div>
         <div>{blog.url}</div>
-        <div>likes: {blog.likes} <button onClick={() => handleLikes(blog.id, blogObject)}>like</button></div>
+        <div>likes: {blog.likes} <button id='like' onClick={() => handleLikes(blog.id, blogObject)}>like</button></div>
         <div>{username}</div>
         <button onClick={() => {if (confirm(`Remove blog ${blog.title}?`)) {handleDelete(blog.id, blog.title)}}}>delete blog</button>
       </div>

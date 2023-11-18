@@ -59,7 +59,7 @@ const NewBlogForm = ({ userInfo, handleLogOut, createBlog }) => {
 
       {/* <h2>blogs</h2>
         <Notification notification={notification} addedBlog={addedBlog}/> */}
-      <p>{userInfo.name} logged in <button onClick={handleLogOut}>logout</button></p>
+      <p>{userInfo.name} logged in <button id='logout' onClick={handleLogOut}>logout</button></p>
       <Togglable buttonLabel='create blog' ref={togglableRef}>
         <BlogForm handleCreate={handleCreate} title={title} author={author} url={url} handleAuthorChange={({ target }) => setAuthor(target.value)} handleTitleChange={({ target }) => setTitle(target.value) } handleUrlChange={({ target }) => setUrl(target.value)}/>
       </Togglable>
